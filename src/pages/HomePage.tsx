@@ -1,5 +1,5 @@
 
-function App() {
+function HomePage() {
 
   return (
 <h1>
@@ -8,4 +8,4 @@ function App() {
   )
 }
 
-export default App
+export default HomePage
