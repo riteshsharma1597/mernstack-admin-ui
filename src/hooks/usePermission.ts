@@ -4,7 +4,7 @@ const usePermission = () => {
   const allowedRoles = ["admin", "manager"];
 
   const _hasPermission = (user: null | User) => {
-    if (user) allowedRoles.includes(user.role);
+    if (user) return allowedRoles.includes(user.role);
     return false;
   };
 
