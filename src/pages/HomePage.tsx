@@ -1,11 +1,14 @@
+import { Typography } from "antd";
+import { useAuthStore } from "../store";
 
+const { Title } = Typography;
 function HomePage() {
-
+  const { user } = useAuthStore();
   return (
-<h1>
-  Hello from Admin ui
-</h1>
-  )
+    <div>
+      <Title level={4}>Welcome, {user?.firstName} 😀</Title>
+    </div>
+  );
 }
 
-export default HomePage
+export default HomePage;
