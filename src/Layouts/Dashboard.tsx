@@ -3,43 +3,44 @@ import { useAuthStore } from "../store";
 import {
   Avatar,
   Badge,
-  Button,
   Dropdown,
   Flex,
   Layout,
   Menu,
-  Segmented,
-  SegmentedProps,
   Space,
   theme,
 } from "antd";
-import { HomeOutlined, UserOutlined, BellFilled } from "@ant-design/icons";
+import Icon, { BellFilled } from "@ant-design/icons";
 import { useState } from "react";
 import Logo from "../components/icons/Logo";
 import { useMutation } from "@tanstack/react-query";
 import { logout } from "../http/api";
+import Home from "../components/icons/Home";
+import { foodIcon } from "../components/icons/FoodIcon";
+import BasketIcon from "../components/icons/BasketIcon";
+import GiftIcon from "../components/icons/GiftIcon";
 
 const { Content, Footer, Header, Sider } = Layout;
 const items = [
-  { key: "/", icon: <HomeOutlined />, label: <NavLink to="/">Home</NavLink> },
   {
-    key: "/users",
-    icon: <UserOutlined />,
-    label: <NavLink to="/users">Users</NavLink>,
+    key: "/",
+    icon: <Icon component={Home} />,
+    label: <NavLink to="/">Home</NavLink>,
   },
+
   {
-    key: "/restaurants",
-    icon: <UserOutlined />,
-    label: <NavLink to="/restaurants">Restaurants</NavLink>,
+    key: "/products",
+    icon: <Icon component={foodIcon} />,
+    label: <NavLink to="/products">Products</NavLink>,
   },
   {
     key: "/orders",
-    icon: <UserOutlined />,
+    icon: <Icon component={BasketIcon} />,
     label: <NavLink to="/orders">Orders</NavLink>,
   },
   {
     key: "/promos",
-    icon: <UserOutlined />,
+    icon: <Icon component={GiftIcon} />,
     label: <NavLink to="/promos">Promos</NavLink>,
   },
 ];
