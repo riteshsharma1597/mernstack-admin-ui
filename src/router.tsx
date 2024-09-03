@@ -4,6 +4,7 @@ import LoginPage from "./pages/login/login";
 import Dashboard from "./Layouts/Dashboard";
 import Unauthenticated from "./Layouts/Unauthenticated";
 import Root from "./Layouts/Root";
+import Users from "./pages/users/Users";
 
 export const router = createBrowserRouter([
   {
@@ -13,7 +14,10 @@ export const router = createBrowserRouter([
       {
         path: "",
         element: <Dashboard />,
-        children: [{ path: "", element: <HomePage /> }],
+        children: [
+          { path: "", element: <HomePage /> },
+          { path: "/users", element: <Users /> },
+        ],
       },
       {
         path: "/auth",
