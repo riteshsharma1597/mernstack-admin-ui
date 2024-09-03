@@ -19,6 +19,7 @@ import Home from "../components/icons/Home";
 import { foodIcon } from "../components/icons/FoodIcon";
 import BasketIcon from "../components/icons/BasketIcon";
 import GiftIcon from "../components/icons/GiftIcon";
+import UserIcon from "../components/icons/UserIcon";
 
 const { Content, Footer, Header, Sider } = Layout;
 const items = [
@@ -27,7 +28,16 @@ const items = [
     icon: <Icon component={Home} />,
     label: <NavLink to="/">Home</NavLink>,
   },
-
+  {
+    key: "/users",
+    icon: <Icon component={UserIcon} />,
+    label: <NavLink to="/users">Users</NavLink>,
+  },
+  {
+    key: "/restaurants",
+    icon: <Icon component={foodIcon} />,
+    label: <NavLink to="/restaurants">Restaurants</NavLink>,
+  },
   {
     key: "/products",
     icon: <Icon component={foodIcon} />,
