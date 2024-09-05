@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { Breadcrumb, Table } from "antd";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { getUsers } from "../../http/api";
-import { render } from "@testing-library/react";
 import { User } from "../../types";
+import { useAuthStore } from "../../store";
 
 const columns = [
   {
@@ -48,6 +48,11 @@ const Users = () => {
     },
   });
 
+  const { user } = useAuthStore();
+
+  if (user?.role !== "admin") {
+    return <Navigate to="/" replace={true} />;
+  }
   return (
     <>
       <Breadcrumb
