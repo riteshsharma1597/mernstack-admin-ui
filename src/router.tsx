@@ -5,6 +5,7 @@ import Dashboard from "./Layouts/Dashboard";
 import Unauthenticated from "./Layouts/Unauthenticated";
 import Root from "./Layouts/Root";
 import Users from "./pages/users/Users";
+import Tenants from "./pages/tenants/Tenants";
 
 export const router = createBrowserRouter([
   {
@@ -17,6 +18,7 @@ export const router = createBrowserRouter([
         children: [
           { path: "", element: <HomePage /> },
           { path: "/users", element: <Users /> },
+          { path: "/restaurants", element: <Tenants /> },
         ],
       },
       {

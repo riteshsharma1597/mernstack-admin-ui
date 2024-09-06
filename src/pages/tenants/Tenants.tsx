@@ -1,60 +1,42 @@
 import { useQuery } from "@tanstack/react-query";
-import { Breadcrumb, Button, Drawer, Space, Table, theme } from "antd";
+import { Breadcrumb, Button, Drawer, Space, Table } from "antd";
 import { Link, Navigate } from "react-router-dom";
-import { getUsers } from "../../http/api";
-import { User } from "../../types";
+import { getTenants, getUsers } from "../../http/api";
 import { useAuthStore } from "../../store";
-import UsersFilter from "./UsersFilter";
+import TenantsFilter from "./TenantsFilter";
 import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import UserForm from "./forms/UserForm";
 
 const columns = [
   {
-    title: "Id",
+    title: "ID",
     dataIndex: "id",
     key: "id",
   },
   {
     title: "Name",
-    dataIndex: "firstName",
-    key: "firstName",
-    render: (_text: string, record: User) => {
-      return (
-        <div>
-          {record.firstName} {record.lastName}
-        </div>
-      );
-    },
+    dataIndex: "name",
+    key: "name",
   },
   {
-    title: "Email",
-    dataIndex: "email",
-    key: "email",
-  },
-  {
-    title: "Role",
-    dataIndex: "role",
-    key: "role",
+    title: "Address",
+    dataIndex: "address",
+    key: "address",
   },
 ];
 
-const Users = () => {
+const Tenants = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const {
-    token: { colorBgLayout },
-  } = theme.useToken();
-
-  const {
-    data: userData,
+    data: tenants,
     isLoading,
     isError,
     error,
   } = useQuery({
-    queryKey: ["user"],
+    queryKey: ["tenants"],
     queryFn: () => {
-      return getUsers().then((res) => res.data);
+      return getTenants().then((res) => res.data);
     },
   });
 
@@ -74,7 +56,7 @@ const Users = () => {
       />
       {isLoading && <h1>Loading....</h1>}
       {isError && <h1>{error.message}</h1>}
-      <UsersFilter
+      <TenantsFilter
         onFilterChange={(filterName: string, filterValue: string) => {
           console.log(filterName, filterValue);
         }}
@@ -84,20 +66,19 @@ const Users = () => {
           icon={<PlusOutlined />}
           onClick={() => setDrawerOpen(true)}
         >
-          Add User
+          Add Restaurants
         </Button>
-      </UsersFilter>
+      </TenantsFilter>
       <Table
         style={{ paddingTop: "1rem" }}
-        dataSource={userData}
+        dataSource={tenants}
         columns={columns}
         rowKey={"id"}
       />
       <Drawer
-        title="Create User"
+        title="Add Restaurants"
         width={720}
         destroyOnClose={true}
-        styles={{ body: { backgroundColor: colorBgLayout } }}
         onClose={() => {
           setDrawerOpen(false);
         }}
@@ -108,11 +89,10 @@ const Users = () => {
             <Button type="primary">Submit</Button>
           </Space>
         }
-      >
-        <UserForm />
-      </Drawer>
+      />
+      ;
     </>
   );
 };
 
-export default Users;
+export default Tenants;
