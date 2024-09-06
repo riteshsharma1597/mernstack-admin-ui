@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Breadcrumb, Button, Drawer, Space, Table, theme } from "antd";
+import { Breadcrumb, Button, Drawer, Form, Space, Table, theme } from "antd";
 import { Link, Navigate } from "react-router-dom";
 import { getUsers } from "../../http/api";
 import { User } from "../../types";
@@ -109,7 +109,9 @@ const Users = () => {
           </Space>
         }
       >
-        <UserForm />
+        <Form layout="vertical">
+          <UserForm />
+        </Form>
       </Drawer>
     </>
   );
