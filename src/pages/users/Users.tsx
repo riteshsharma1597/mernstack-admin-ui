@@ -1,8 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Breadcrumb, Button, Drawer, Form, Space, Table, theme } from "antd";
 import { Link, Navigate } from "react-router-dom";
-import { getUsers } from "../../http/api";
-import { User } from "../../types";
+import { createUser, getUsers } from "../../http/api";
+import { CreatUserData, User } from "../../types";
 import { useAuthStore } from "../../store";
 import UsersFilter from "./UsersFilter";
 import { useState } from "react";
@@ -40,7 +40,10 @@ const columns = [
 ];
 
 const Users = () => {
+  const [form] = Form.useForm();
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const queryClient = useQueryClient();
 
   const {
     token: { colorBgLayout },
@@ -59,6 +62,24 @@ const Users = () => {
   });
 
   const { user } = useAuthStore();
+
+  const { mutate: userMutate } = useMutation({
+    mutationKey: ["user"],
+    mutationFn: async (data: CreatUserData) =>
+      createUser(data).then((res) => res.data),
+
+    onSuccess: () => {
+      console.log("User Created Successfully");
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
+  });
+  const handleClickSubmit = async () => {
+    await form.validateFields();
+    await userMutate(form.getFieldsValue());
+    form.resetFields();
+    setDrawerOpen(false);
+    console.log("Form Values", form.getFieldsValue());
+  };
 
   if (user?.role !== "admin") {
     return <Navigate to="/" replace={true} />;
@@ -100,16 +121,26 @@ const Users = () => {
         styles={{ body: { backgroundColor: colorBgLayout } }}
         onClose={() => {
           setDrawerOpen(false);
+          form.resetFields();
         }}
         open={drawerOpen}
         extra={
           <Space>
-            <Button>Cancel</Button>
-            <Button type="primary">Submit</Button>
+            <Button
+              onClick={() => {
+                form.resetFields();
+                setDrawerOpen(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button type="primary" onClick={handleClickSubmit}>
+              Submit
+            </Button>
           </Space>
         }
       >
-        <Form layout="vertical">
+        <Form layout="vertical" form={form}>
           <UserForm />
         </Form>
       </Drawer>

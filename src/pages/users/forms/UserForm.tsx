@@ -81,22 +81,15 @@ const UserForm = () => {
                     style={{ width: "100%" }}
                     allowClear={true}
                     placeholder="Select Role"
-                    onChange={
-                      (selectedItem) => console.log(selectedItem)
-                      //   onFilterChange("roleFilter", selectedItem)
-                    }
+                    onChange={(selectedItem) => console.log(selectedItem)}
                   >
-                    <Select.Option value="re">Admin</Select.Option>
+                    <Select.Option value="admin">Admin</Select.Option>
                     <Select.Option value="manager">Manager</Select.Option>
                     <Select.Option value="customer">Customer</Select.Option>
-                  </Select>{" "}
+                  </Select>
                 </Form.Item>
               </Col>
-              {/* </Row>
-          </Card> */}
 
-              {/* <Card title="Restaurant" bordered={false}> */}
-              {/* <Row gutter={20}> */}
               <Col span={12}>
                 <Form.Item
                   label="Restaurant"
