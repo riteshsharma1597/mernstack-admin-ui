@@ -2,12 +2,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Breadcrumb, Button, Drawer, Form, Space, Table, theme } from "antd";
 import { Link, Navigate } from "react-router-dom";
 import { createUser, getUsers } from "../../http/api";
-import { CreatUserData, User } from "../../types";
+import { CreatUserData, TableParams, User } from "../../types";
 import { useAuthStore } from "../../store";
 import UsersFilter from "./UsersFilter";
 import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import UserForm from "./forms/UserForm";
+import { PER_PAGE } from "../../constants";
 
 const columns = [
   {
@@ -45,6 +46,11 @@ const Users = () => {
 
   const queryClient = useQueryClient();
 
+  const [tableParams, setTableParams] = useState({
+    currentPage: 1,
+    perPage: PER_PAGE,
+  });
+
   const {
     token: { colorBgLayout },
   } = theme.useToken();
@@ -55,9 +61,13 @@ const Users = () => {
     isError,
     error,
   } = useQuery({
-    queryKey: ["user"],
+    queryKey: ["user", tableParams],
     queryFn: () => {
-      return getUsers().then((res) => res.data);
+      const queryString = new URLSearchParams(
+        tableParams as unknown as Record<string, string>
+      ).toString();
+      console.log(queryString);
+      return getUsers(queryString).then((res) => res.data);
     },
   });
 
@@ -110,9 +120,21 @@ const Users = () => {
       </UsersFilter>
       <Table
         style={{ paddingTop: "1rem" }}
-        dataSource={userData}
+        dataSource={userData?.data}
         columns={columns}
         rowKey={"id"}
+        pagination={{
+          total: userData?.total,
+          pageSize: tableParams.perPage,
+          current: tableParams.currentPage,
+          onChange: (page) => {
+            console.log(page);
+            setTableParams((prev) => {
+              return { ...prev, currentPage: page };
+            });
+            // setTableParams((prev)=>{ currentPage: page, perPage: pageSize });
+          },
+        }}
       />
       <Drawer
         title="Create User"

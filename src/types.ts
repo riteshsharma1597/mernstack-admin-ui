@@ -25,3 +25,8 @@ export type Tenant = {
   name: string;
   address: string;
 };
+
+export type TableParams = {
+  currentPage: number;
+  pageSize: number;
+};
