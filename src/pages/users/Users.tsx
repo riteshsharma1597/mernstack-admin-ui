@@ -1,5 +1,20 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Breadcrumb, Button, Drawer, Form, Space, Table, theme } from "antd";
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import {
+  Breadcrumb,
+  Button,
+  Drawer,
+  Flex,
+  Form,
+  Space,
+  Spin,
+  Table,
+  theme,
+} from "antd";
 import { Link, Navigate } from "react-router-dom";
 import { createUser, getUsers } from "../../http/api";
 import { CreatUserData, TableParams, User } from "../../types";
@@ -57,7 +72,7 @@ const Users = () => {
 
   const {
     data: userData,
-    isLoading,
+    isFetching,
     isError,
     error,
   } = useQuery({
@@ -69,6 +84,7 @@ const Users = () => {
       console.log(queryString);
       return getUsers(queryString).then((res) => res.data);
     },
+    placeholderData: keepPreviousData,
   });
 
   const { user } = useAuthStore();
@@ -96,15 +112,17 @@ const Users = () => {
   }
   return (
     <>
-      <Breadcrumb
-        separator=">"
-        items={[
-          { title: <Link to="/">Dashboard</Link> },
-          { title: <Link to="/users">Users</Link> },
-        ]}
-      />
-      {isLoading && <h1>Loading....</h1>}
-      {isError && <h1>{error.message}</h1>}
+      <Flex justify="space-between">
+        <Breadcrumb
+          separator=">"
+          items={[
+            { title: <Link to="/">Dashboard</Link> },
+            { title: <Link to="/users">Users</Link> },
+          ]}
+        />
+        {isFetching && <Spin />}
+        {isError && <h1>{error.message}</h1>}
+      </Flex>
       <UsersFilter
         onFilterChange={(filterName: string, filterValue: string) => {
           console.log(filterName, filterValue);
@@ -132,7 +150,6 @@ const Users = () => {
             setTableParams((prev) => {
               return { ...prev, currentPage: page };
             });
-            // setTableParams((prev)=>{ currentPage: page, perPage: pageSize });
           },
         }}
       />
