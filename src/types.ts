@@ -30,3 +30,8 @@ export type TableParams = {
   currentPage: number;
   pageSize: number;
 };
+
+export type FieldData = {
+  name: string[];
+  value?: string;
+};
