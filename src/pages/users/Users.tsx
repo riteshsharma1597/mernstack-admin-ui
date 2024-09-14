@@ -123,7 +123,7 @@ const Users = () => {
 
   const debouncedQUpdate = React.useMemo(() => {
     return debounce((value: string | undefined) => {
-      setTableParams((prev) => ({ ...prev, q: value }));
+      setTableParams((prev) => ({ ...prev, q: value, currentPage: 1 }));
     }, 500);
   }, []);
 
@@ -137,7 +137,11 @@ const Users = () => {
     if ("q" in changedFilterFields) {
       debouncedQUpdate(changedFilterFields.q);
     } else {
-      setTableParams((prev) => ({ ...prev, ...changedFilterFields }));
+      setTableParams((prev) => ({
+        ...prev,
+        ...changedFilterFields,
+        currentPage: 1,
+      }));
     }
   };
 
