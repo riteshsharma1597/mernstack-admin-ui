@@ -24,7 +24,8 @@ import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import UserForm from "./forms/UserForm";
 import { PER_PAGE } from "../../constants";
-import Item from "antd/es/list/Item";
+import { debounce } from "lodash";
+import React from "react";
 
 const columns = [
   {
@@ -53,6 +54,14 @@ const columns = [
     title: "Role",
     dataIndex: "role",
     key: "role",
+  },
+  {
+    title: "Restaurants",
+    dataIndex: "tenant",
+    key: "tenant",
+    render: (_text: string, record: User) => {
+      return <div>{record.tenant?.name}</div>;
+    },
   },
 ];
 
@@ -112,6 +121,12 @@ const Users = () => {
     console.log("Form Values", form.getFieldsValue());
   };
 
+  const debouncedQUpdate = React.useMemo(() => {
+    return debounce((value: string | undefined) => {
+      setTableParams((prev) => ({ ...prev, q: value }));
+    }, 500);
+  }, []);
+
   const onFilterChange = (changedFields: FieldData[]) => {
     const changedFilterFields = changedFields
       .map((item) => ({
@@ -119,7 +134,11 @@ const Users = () => {
       }))
       .reduce((acc, item) => ({ ...acc, ...item }));
 
-    setTableParams((prev) => ({ ...prev, ...changedFilterFields }));
+    if ("q" in changedFilterFields) {
+      debouncedQUpdate(changedFilterFields.q);
+    } else {
+      setTableParams((prev) => ({ ...prev, ...changedFilterFields }));
+    }
   };
 
   if (user?.role !== "admin") {
