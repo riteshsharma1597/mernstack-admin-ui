@@ -144,13 +144,9 @@ const Users = () => {
 
     const isEditMode = !!currentEditingUser;
     if (isEditMode) {
-      console.log("Updating...");
       await updateUserMutation(form.getFieldsValue());
-      console.log("Form Values", form.getFieldsValue());
     } else {
-      console.log("Creating...");
       await userMutate(form.getFieldsValue());
-      console.log("Form Values", form.getFieldsValue());
     }
     form.resetFields();
     setCurrentEditingUser(null);
