@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Tenant } from "../../../types";
 
 const UserForm = ({ isEditMode = false }: { isEditMode: boolean }) => {
+  const selectedRole = Form.useWatch("role");
   const { data: tenants } = useQuery({
     queryKey: ["tenants"],
     queryFn: () => {
@@ -90,36 +91,36 @@ const UserForm = ({ isEditMode = false }: { isEditMode: boolean }) => {
                   >
                     <Select.Option value="admin">Admin</Select.Option>
                     <Select.Option value="manager">Manager</Select.Option>
-                    <Select.Option value="customer">Customer</Select.Option>
                   </Select>
                 </Form.Item>
               </Col>
-
-              <Col span={12}>
-                <Form.Item
-                  label="Restaurant"
-                  name="tenantId"
-                  rules={[
-                    { required: true, message: "Restaurant is required" },
-                  ]}
-                >
-                  <Select
-                    style={{ width: "100%" }}
-                    allowClear={true}
-                    placeholder="Select Restaurant"
-                    onChange={
-                      (selectedItem) => console.log(selectedItem)
-                      //   onFilterChange("roleFilter", selectedItem)
-                    }
+              {selectedRole === "manager" && (
+                <Col span={12}>
+                  <Form.Item
+                    label="Restaurant"
+                    name="tenantId"
+                    rules={[
+                      { required: true, message: "Restaurant is required" },
+                    ]}
                   >
-                    {tenants?.map((tenant: Tenant) => (
-                      <Select.Option key={tenant.id} value={tenant.id}>
-                        {tenant.name}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-              </Col>
+                    <Select
+                      style={{ width: "100%" }}
+                      allowClear={true}
+                      placeholder="Select Restaurant"
+                      onChange={
+                        (selectedItem) => console.log(selectedItem)
+                        //   onFilterChange("roleFilter", selectedItem)
+                      }
+                    >
+                      {tenants?.map((tenant: Tenant) => (
+                        <Select.Option key={tenant.id} value={tenant.id}>
+                          {tenant.name}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                </Col>
+              )}
             </Row>
           </Card>
         </Space>
